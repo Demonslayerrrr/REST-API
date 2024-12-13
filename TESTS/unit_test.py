@@ -42,6 +42,34 @@ def test_post_users():
         assert user not in updated_users
 
 
+def test_patch_user():
+    with app.app.test_request_context():
+        controller = controllers.UserController()
+        
+     
+        user = {"id": 2, "name": "a", "last_name": "b"}
+
+        controller.add_users(user, "test_database.json")
+
+        file_path = os.path.join(os.path.dirname(__file__), f"../test_database.json")
+        
+
+        with open(file_path, 'r') as file:
+            users: list[dict] = json.load(file)
+
+        print("Users before patch:", users)
+
+        controller.modify_users({"name": "S"}, 2, "test_database.json")
+
+        with open(file_path, 'r') as file:
+            updated_users: list[dict] = json.load(file)
+
+        print("Users after patch:", updated_users)
+
+        assert {"id": 2, "name": "S", "last_name": "b"} in updated_users
 
 
-    
+        updated_users = [u for u in updated_users if u.get("id") != user.get("id")]
+
+        with open(file_path, 'w') as file:
+            json.dump(updated_users, file)
