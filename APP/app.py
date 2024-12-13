@@ -1,6 +1,6 @@
 from flask import Flask,jsonify,request
 from flask.typing import ResponseReturnValue
-from controllers import UserController
+from .controllers import UserController
 from json import dump, load
 
 app = Flask(__name__)
@@ -13,7 +13,7 @@ def print_users():
     return jsonify(body),200
 
 @app.get("/users/<int:user_id>")
-def print_user_with_id(user_id):
+def print_user_with_id(user_id:int):
     controller = UserController()
     body = controller.read_users(user_id)
     return jsonify(body),200
