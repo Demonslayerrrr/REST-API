@@ -100,3 +100,25 @@ def test_put_user():
 
             with open(file_path, 'w') as file:
                 json.dump(updated_users, file)
+
+def test_remove_user():
+    with app.app.test_request_context():
+        controller = controllers.UserController()
+
+
+        user = {"id": 2, "name": "a", "last_name": "b"}
+        controller.add_users(user, "test_database.json")
+
+        file_path = os.path.join(os.path.dirname(__file__), "../test_database.json")
+        with open(file_path, 'r') as file:
+            users: list[dict] = json.load(file)
+        assert user in users
+
+        controller.delete_user(2, "test_database.json")
+
+        with open(file_path, 'r') as file:
+            updated_users: list[dict] = json.load(file)
+
+        assert user not in updated_users
+
+

@@ -2,8 +2,7 @@ import json
 import os
 
 class UserController:
-    @staticmethod
-    def read_users(id:int=None,file_name:str="users.json") -> str:
+    def read_users(self,id:int=None,file_name:str="users.json") -> str:
         try:
             file_path = os.path.join(os.path.dirname(__file__), f"../{file_name}")
             with open(file_path, "r") as f:
@@ -75,22 +74,20 @@ class UserController:
             raise e
         
     @staticmethod
-    def delete_user(id:int,file_name:str="users.json"):
+    def delete_user(id: int, file_name: str = "users.json"):
         try:
             file_path = os.path.join(os.path.dirname(__file__), f"../{file_name}")
             with open(file_path, 'r') as file:
                 users: list[dict] = json.load(file)
             
-            for i,user in enumerate(users):
-                if user.get("id") == id:
-                    del users[i]
-            with open("../users.json", 'w') as file:
-                json.dump(users, file, indent=4)
+            updated_users = [u for u in users if u.get("id") != id]
+            
+            with open(file_path, 'w') as file:
+                json.dump(updated_users, file, indent=4)
         except FileNotFoundError:
             raise ValueError("Users database not found")
         except Exception as e:
             raise e
-
 
 
             

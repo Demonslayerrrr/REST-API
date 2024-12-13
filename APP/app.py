@@ -7,13 +7,13 @@ app = Flask(__name__)
 
 
 @app.get("/users")
-def print_users():
+def print_users()->ResponseReturnValue:
     controller = UserController()
     body = controller.read_users()
     return jsonify(body),200
 
 @app.get("/users/<int:user_id>")
-def print_user_with_id(user_id:int):
+def print_user_with_id(user_id:int)->ResponseReturnValue:
     controller = UserController()
     body = controller.read_users(user_id)
     return jsonify(body),200
@@ -21,7 +21,7 @@ def print_user_with_id(user_id:int):
 
 
 @app.post("/users")
-def post_user():
+def post_user()->ResponseReturnValue:
     new_user_data = request.get_json()
 
     name,last_name = new_user_data["name"], new_user_data["last_name"]
@@ -43,7 +43,7 @@ def post_user():
     return jsonify(controller.read_users()),201
 
 @app.patch("/users/<int:id>")
-def patch_user(id:int):
+def patch_user(id:int)->ResponseReturnValue:
     controller = UserController()
 
     try:
@@ -68,8 +68,7 @@ def patch_user(id:int):
         return jsonify({"error": str(e)}), 400
     
 @app.put("/users/<int:id>")
-def put_user(id:int):
-
+def put_user(id:int)->ResponseReturnValue:
     controller = UserController()
 
     try:
@@ -94,7 +93,7 @@ def put_user(id:int):
         return jsonify({"error": str(e)}), 400
     
 @app.delete("/users/<int:id>")
-def remove_user(id:int):
+def remove_user(id:int)->ResponseReturnValue:
     controller = UserController()
 
     try:
